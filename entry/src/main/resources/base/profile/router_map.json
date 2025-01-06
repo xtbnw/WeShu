@@ -1,0 +1,40 @@
+{
+  "routerMap": [
+    {
+      "name": "PersonalInfo", 
+      "pageSourceFile": "src/main/ets/view/mine/PersonalInfo.ets",
+      "buildFunction": "PersonalInfoBuilder",
+      "data": {}
+    },
+    {
+      "name": "Setting",
+      "pageSourceFile": "src/main/ets/view/mine/Setting.ets",
+      "buildFunction": "SettingBuilder",
+      "data": {}
+    },
+    {
+      "name": "About",
+      "pageSourceFile": "src/main/ets/view/mine/About.ets",
+      "buildFunction": "AboutBuilder",
+      "data": {}
+    },
+    {
+      "name": "CheckUpdate",
+      "pageSourceFile": "src/main/ets/view/mine/CheckUpdate.ets",
+      "buildFunction": "CheckUpdateBuilder",
+      "data": {}
+    },
+    {
+      "name": "FontSize",
+      "pageSourceFile": "src/main/ets/view/mine/FontSize.ets",
+      "buildFunction": "FontSizeBuilder",
+      "data": {}
+    },
+    {
+      "name": "Update",
+      "pageSourceFile": "src/main/ets/view/reminder/UpdatePlan.ets",
+      "buildFunction": "UpdateBuilder",
+      "data": {}
+    }
+  ]
+}
