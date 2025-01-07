@@ -1,6 +1,5 @@
 import PreferencesUtil from "../../util/PreferencesUtil";
 
-//TODO 头像昵称持久化存储查改，id生成算法
 @Component
 export struct PersonalInfo {
   @Consume('pageInfos') pageInfos: NavPathStack;//父子组件传递

@@ -75,15 +75,14 @@ export class RDBStoreUtil {
     })
   }
 
-  async insertPlan(ID: null, ct: string, status: boolean,remindTime:string=new Date().toISOString(),repeat?:string) {//插入数据
+  async insertPlan(ID: null, ct: string, status: boolean,remindTime:string=new Date().toISOString(),repeat:string="Never") {//插入数据
     const Data: relationalStore.ValuesBucket = {
       'id': ID,
       'content': ct,
       'isCompleted': status,
       'remindDateTime':remindTime,
+      'repeatType':repeat
     };
-    if(remindTime)Data.remindTime=remindTime;
-    if(repeat)Data.repeat=repeat;
     await this.objectiveRDB?.insert('TODOLIST', Data,
       relationalStore.ConflictResolution.ON_CONFLICT_REPLACE).then((rowId: number) => {
       hilog.info(0x0000, TAG, `Insert is successful, rowId = ${rowId}`);
@@ -99,8 +98,8 @@ export class RDBStoreUtil {
           const id = resultSet.getValue(resultSet.getColumnIndex('id')) as number;
           const content=resultSet.getValue(resultSet.getColumnIndex('content')) as string;
           const isCompleted=resultSet.getValue(resultSet.getColumnIndex('isCompleted')) as boolean;
-          const remindDateTime=resultSet.getValue(resultSet.getColumnIndex('remindDateTime')) as string||undefined;//TODO 如果为空
-          const repeatType=resultSet.getValue(resultSet.getColumnIndex('repeatType')) as string||undefined;
+          const remindDateTime=resultSet.getValue(resultSet.getColumnIndex('remindDateTime')) as string;
+          const repeatType=resultSet.getValue(resultSet.getColumnIndex('repeatType')) as string;
           plansSet.push(new ReminderItemModel(id,content,isCompleted,remindDateTime,repeatType));
         }
         resultSet.close();
@@ -135,6 +134,21 @@ export class RDBStoreUtil {
       hilog.info(0x0000, TAG, `Updated row count: ${rows}`);
     }).catch((err: BusinessError) => {
       hilog.error(0x0000, TAG, `Updated failed, code is ${err.code},message is ${err.message}`);
+    })
+  }
+  async updateTimeandRepeat(planID: number, ct:string,remindTime: Date, repeatType: string) {//更新数据
+    const planData: relationalStore.ValuesBucket = {
+      'content': ct,
+      'remindDateTime': remindTime.toISOString(),
+      'repeatType': repeatType
+    };
+    let predicates = new relationalStore.RdbPredicates('TODOLIST');
+    predicates.equalTo('id', planID);
+    await this.objectiveRDB?.update(planData, predicates,
+      relationalStore.ConflictResolution.ON_CONFLICT_REPLACE).then(async (rows: Number) => {
+      hilog.info(0x0000, TAG, `Updatedtar row count: ${rows}`);
+    }).catch((err: BusinessError) => {
+      hilog.error(0x0000, TAG, `Updatedtar failed, code is ${err.code},message is ${err.message}`);
     })
   }
   async deletePlan(planID: number) {//删除数据

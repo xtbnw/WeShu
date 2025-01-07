@@ -1,8 +1,11 @@
 import { preferences } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Context } from '@kit.AbilityKit';
 
 const KEY_APP_FONT_SIZE = 'appFontSize';
+const KEY_DISPLAY_ALL='displayAll'
+const KEY_DISPLAY_COMPLETED='displayCompleted'
 const TAG = 'PreferencesUtil';
 
 /**
@@ -17,6 +20,12 @@ export class PreferencesUtil {
   getFontPreferences(context: Context) {
     this.preference = preferences.getPreferencesSync(context, { name: 'FontPreferences' });
     hilog.info(0x0000, TAG, 'create success');
+  }
+  getAllPreferences(context:Context){
+    this.preference = preferences.getPreferencesSync(context, { name: 'AllPreferences' });
+  }
+  getCompletedPreferences(context:Context){
+    this.preference = preferences.getPreferencesSync(context, { name: 'CompletedPreferences' });
   }
 
   /**
@@ -34,6 +43,14 @@ export class PreferencesUtil {
         hilog.info(0x0000, TAG, 'Succeeded in flushing.');
       });
   }
+  saveChangeDisplayAll(isAll:boolean){
+    this.preference?.putSync(KEY_DISPLAY_ALL, isAll);
+    this.preference?.flush();
+  }
+  saveChangeDisplayCompleted(isCompleted:boolean){
+    this.preference?.putSync(KEY_DISPLAY_COMPLETED, isCompleted);
+    this.preference?.flush();
+  }
 
   /**
    *The method of getting fontsize offset.
@@ -43,7 +60,16 @@ export class PreferencesUtil {
     fontSizeOffset = this.preference?.getSync(KEY_APP_FONT_SIZE, 0) as number;
     return fontSizeOffset;
   }
-
+  getChangeDisplayAll(){
+    let isAll:boolean=false;
+    isAll=this.preference?.getSync(KEY_DISPLAY_ALL, false) as boolean;
+    return isAll;
+  }
+  getChangeDisplayCompleted(){
+    let isShow:boolean=false;
+    isShow=this.preference?.getSync(KEY_DISPLAY_COMPLETED, false) as boolean;
+    return isShow;
+  }
 }
 
 export default new PreferencesUtil();

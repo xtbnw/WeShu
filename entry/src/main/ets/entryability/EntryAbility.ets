@@ -9,6 +9,8 @@ export default class EntryAbility extends UIAbility {
     this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     PreferencesUtil.getFontPreferences(this.context);
+    PreferencesUtil.getAllPreferences(this.context)
+    PreferencesUtil.getCompletedPreferences(this.context)
     RDBStoreUtil.createObjectiveRDB(this.context);
   }
 

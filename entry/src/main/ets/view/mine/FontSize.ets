@@ -11,7 +11,7 @@ export struct FontSize {
   }
 
   build() {
-    NavDestination() {//TODO 目前用的是 NavDestination，也可以改成弹窗@CustomDialog
+    NavDestination() {//目前用的是 NavDestination，也可以改成弹窗@CustomDialog
       Stack({ alignContent: Alignment.Bottom }) {//堆叠
         Column() {
           Row(){

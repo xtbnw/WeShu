@@ -1,15 +1,19 @@
-import RDBStoreUtil from "../../util/RDBStoreUtil";
 import { ReminderItemModel } from "../../viewmodel/ReminderItemModel";
+import RDBStoreUtil from "../../util/RDBStoreUtil";
 
 @Component
 export struct UpdatePlan {
   @StorageLink('fontSizeOffset') fontSizeOffset: number = 0; //全局变量：字体大小偏移量
   @Consume('update') update!: NavPathStack;
-  plan: ReminderItemModel = this.update.getParamByIndex(0) as ReminderItemModel
+  @StorageLink('plans') PlansSet: Array<ReminderItemModel>=[];
+  plan: ReminderItemModel = this.update.getParamByIndex(0) as ReminderItemModel;
+  @State Id: number =this.plan.id;
   @State content: string = this.plan.content;
-  @State remindDate: Date = new Date();
-  @State remindTime: Date = new Date();
-  @State repeatText: string = "Never";
+  @State remindDateTime: string=this.plan.remindDateTime;
+  @State date:Date=new Date(this.plan.remindDateTime);
+  @State timeHour:number=new Date(this.plan.remindDateTime).getHours()+8;
+  @State timeMinute:number=new Date(this.plan.remindDateTime).getMinutes();
+  @State repeatText: string =this.plan.repeatType
 
   build() {
     NavDestination() {
@@ -30,8 +34,12 @@ export struct UpdatePlan {
               .fontColor('#2185ed')
               .fontSize(20 + this.fontSizeOffset)
               .margin({ right: 6 })
-              .onClick(() => {
-                this.update.pop({ result: this.content }) //TODO 同步 存储
+              .onClick(async () => {
+                await RDBStoreUtil.updateTimeandRepeat(this.Id, this.content,this.date, this.repeatText)
+                RDBStoreUtil.queryAllPlans().then((plans)=>{
+                  this.PlansSet = plans
+                })
+                this.update.pop()
               })
           }
           .justifyContent(FlexAlign.SpaceBetween)
@@ -57,10 +65,13 @@ export struct UpdatePlan {
               .width(24)
               .height(24)
               .margin({ left: 10 })
-            CalendarPicker({ hintRadius: 10, selected: this.remindDate })
+            CalendarPicker({ hintRadius: 10, selected: this.date })
               .edgeAlign(CalendarAlign.END)
               .textStyle({ color: "#ff182431", font: { size: 20, weight: FontWeight.Normal } })
               .borderColor(Color.Transparent)
+              .onChange((value)=>{
+                this.date.setDate(value.getDate())
+              })
           }
           .justifyContent(FlexAlign.SpaceBetween)
           .width('94%')
@@ -73,9 +84,14 @@ export struct UpdatePlan {
               .height(26)
               .margin({ left: 10 })
             TimePicker({
-              selected: this.remindTime,
+              selected: this.date
             })
               .useMilitaryTime(true)
+              .onChange((value: TimePickerResult) => {
+                this.timeHour=value.hour
+                this.timeMinute=value.minute
+                this.date.setHours(this.timeHour,this.timeMinute,0,0)
+              })
           }
           .width('94%')
           .backgroundColor(Color.White)
@@ -89,7 +105,7 @@ export struct UpdatePlan {
             Select([{ value: 'Never' },
               { value: 'Hourly' },
               { value: 'Daily' },
-              { value: 'Mouthly' }])
+              { value: 'Monthly' }])
               .value(this.repeatText)
               .backgroundColor(Color.Transparent)
               .onSelect((index: number, text: string) => {

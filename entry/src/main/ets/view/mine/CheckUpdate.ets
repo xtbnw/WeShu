@@ -1,6 +1,5 @@
 import PreferencesUtil from "../../util/PreferencesUtil";
 
-//TODO 页面渲染时向应用商店发送网络请求检查版本号是否最新
 @Component
 export struct CheckUpdate {
   @Consume('pageInfos') pageInfos: NavPathStack; //父子组件传递
