@@ -4,7 +4,6 @@ import PreferencesUtil from '../../util/PreferencesUtil';
 import { ReminderItemModel } from '../../viewmodel/ReminderItemModel';
 import RDBStoreUtil from '../../util/RDBStoreUtil';
 import { Fliter } from './Fliter'
-import { NotificationUtil } from '../../util/NotificationUtil';
 
 @Component
 export struct ReminderContent {

@@ -1,4 +1,5 @@
 import PreferencesUtil from '../util/PreferencesUtil';
+import { CourseTable } from '../view/coursetable/CourseTable';
 import { MineContent } from '../view/mine/MineContent';
 import { ReminderContent } from '../view/reminder/ReminderContent';
 @Entry
@@ -31,7 +32,9 @@ struct MainIndex {
       }
         .tabBar(this.TabBarBuilder(0,$r('app.media.reminder_icon'),'提醒'))
       //课表
-      TabContent()
+      TabContent(){
+        CourseTable()
+      }
         .tabBar(this.TabBarBuilder(1,$r('app.media.course_icon'),'课表'))
       //个人页
       TabContent(){

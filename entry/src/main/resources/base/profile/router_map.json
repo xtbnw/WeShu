@@ -35,6 +35,12 @@
       "pageSourceFile": "src/main/ets/view/reminder/UpdatePlan.ets",
       "buildFunction": "UpdateBuilder",
       "data": {}
+    },
+    {
+      "name": "WebView",
+      "pageSourceFile": "src/main/ets/view/coursetable/WebView.ets",
+      "buildFunction": "WebViewBuilder",
+      "data": {}
     }
   ]
 }
